@@ -42,8 +42,6 @@ const tokesn_n_ada = ["Ada", ..list_of_tokens]
 
 // ## Pairs
 
-const pair_of_tokens = ("Sundae", "Meld")
-
 // ## Tuples
 
 const my_mega_super_tuple = (1,"two",3)

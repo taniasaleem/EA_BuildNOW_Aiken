@@ -1,18 +1,17 @@
-utxoin="d289035c934945f342d336bcccf55a553783cb22079cbe24d9dd3235bdd71533#0"
-address=$(cat ../compiled/savings.addr) 
-output="5000000"
+utxoin="39834ace4e0592606499d37f13b86c000e38b4a6edf48b0a3a2d66244f7635d3#1"
+address=$(cat ../wallet/bob/bob.addr) 
+output="700000000"
 
 cardano-cli conway transaction build \
   --testnet-magic 2 \
   --tx-in $utxoin \
   --tx-out $address+$output \
-  --tx-out-datum-hash-file ../values/saver.json \
   --change-address $(cat ../wallet/alice.addr)  \
   --out-file deposit.unsigned
 
 cardano-cli conway transaction sign \
     --tx-body-file deposit.unsigned \
-    --signing-key-file ../wallet/bob/bob.skey \
+    --signing-key-file ../wallet/alice.skey \
     --testnet-magic 2 \
     --out-file deposit.signed
 

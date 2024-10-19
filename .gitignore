@@ -16,3 +16,8 @@ Cargo.lock
 .DS_Store
 *.lock
 *.lock
+*.addr
+*.lock
+*.signed
+*.unsigned
+*.uplc

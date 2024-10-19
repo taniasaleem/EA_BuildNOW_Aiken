@@ -1,4 +1,4 @@
-// Recursion
+//// Recursion
 
 fn factorial(x: Int) -> Int {
   when x is {

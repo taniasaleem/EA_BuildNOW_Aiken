@@ -1,3 +1,4 @@
+
 use aiken/collection/list
 // Basic lists map, all, any, filter, foldl, foldr
 use aiken/collection/pairs
@@ -36,9 +37,10 @@ test testing_foldr() {
 
 test tesging_foldl() {
   list.foldr(simplelist(), [], fn(x, xs) { [x, ..xs] }) == [1, 2, 3, 4, 5]
+
 }
 
-//Pairs (Tuples)
+// ## Pairs (Tuples)
 
 fn f() {
   let fixture: List<Pair<ByteArray, Int>> =
@@ -46,6 +48,8 @@ fn f() {
       Pair("a", 100), Pair("b", 200), Pair("c", 300), Pair("d", 400),
       Pair("e", 500),
     ]
+
+
   fixture
 }
 
@@ -55,3 +59,4 @@ test dfq() {
     Pair("e", 503),
   ]
 }
+

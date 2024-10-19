@@ -1,6 +1,6 @@
-utxoin="d289035c934945f342d336bcccf55a553783cb22079cbe24d9dd3235bdd71533#0"
+utxoin="8687ae9c23ac451c38a8b4532029a350d6b667f7b4948dc820e7cf6c19fb9bf0#0"
 address=$(cat ../compiled/savings.addr) 
-output="5000000"
+output="500000000"
 
 cardano-cli conway transaction build \
   --testnet-magic 2 \

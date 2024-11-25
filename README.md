@@ -10,7 +10,7 @@ Emurgo Academy's BuildNOW Aiken course materials.
 
 You can fork the following repositories. When you push your exercise repo commit, a GitHub Action should run and it must succeed. For detailed instructions for each exercise, please refer to README.md of the individual repository.
 
-## Aiken Types
+### Aiken Types
 
 Aiken primitive types:
 
@@ -22,7 +22,7 @@ Custom types:
 - [showcase repo](https://github.com/ariady-putra-emurgo/aiken_custom_types): In this project, we take a look into Aiken custom, opaque, and recursive types
 - [exercise repo](https://github.com/ariady-putra-emurgo/aiken_custom_types_exercise): Your task is to FIX All the types, and play around with them afterward
 
-## Core Features
+### Core Features
 
 Constants, conditional modules, and `aiken docs`:
 
@@ -41,7 +41,7 @@ Control flow:
 - [showcase and exercise repo](https://github.com/ariady-putra-emurgo/aiken_control_flow): `if-else`, `when-is`, `if-is`, `choose_data`
 - [answer repo](https://github.com/ariady-putra-emurgo/aiken_control_answer): This project contains the answer to the activity
 
-## Validators
+### Validators
 
 Minting validator:
 
@@ -61,7 +61,7 @@ Staking validator:
 - [exercise repo](https://github.com/ariady-putra-emurgo/aiken_staking_exercise): Run `aiken c`, replace all **todos** with actual code
 - [answer repo](https://github.com/ariady-putra-emurgo/aiken_staking_answer): This project contains the code for the exercise validators
 
-## Testing and Debugging
+### Testing and Debugging
 
 `aiken check`:
 

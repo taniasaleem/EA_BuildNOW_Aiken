@@ -1,0 +1,129 @@
+{
+  "preamble": {
+    "title": "rcerrud/crowdfunding",
+    "description": "Aiken contracts for project 'rcerrud/crowdfunding'",
+    "version": "0.1.0",
+    "plutusVersion": "v3",
+    "compiler": {
+      "name": "Aiken",
+      "version": "v1.1.4+79d0e45"
+    },
+    "license": "Apache-2.0"
+  },
+  "validators": [
+    {
+      "title": "campaign_management_v01.manage_campaign.spend",
+      "datum": {
+        "title": "datum",
+        "schema": {
+          "$ref": "#/definitions/campaign_management_v01~1CFdatum"
+        }
+      },
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/campaign_management_v01~1CFredeemer"
+        }
+      },
+      "compiledCode": "59023c01010032323232323225333002323232323253330073370e900118041baa001132323253323300b3001300c375400c26464646464646464a66602c60300042a666026601260286ea80284c8c8c8c8c8c8c8c94c8ccc070c0480204cc894ccc078c00c00854ccc078c050dd6980398101baa00b1533301e3014375a60446046604660466046604660406ea802c54ccc078cdc79bae300430203754016910100133006375c600a60406ea802c0045280a5014a02940dd69803180f1baa0173758600e603c6ea806454ccc070cdc3a400401026644a66603c600600426600c6eb8c010c080dd50058008a50375a600c603c6ea805cdd61803980f1baa0191533301c3370e900200409991299980f18018010a99980f19b89375a60446046604660406ea802cdd6980398101baa00b133006375c600a60406ea802c0045280a50375a600c603c6ea805cdd61803980f1baa01916370e6eb4c014c074dd50041180f98101810181018100009180f180f980f980f80091191980080080111299980f8008a50132533301d3371e6eb8c08400801452889980180180098108009180e180e980e980e980e980e980e980e8009180d8009180d180d980d980d980d980d980d980d980d8009bad301830193016375401e602e602a6ea80285858dd7180b000980b0011bad30140013014002375a602400260240046eb4c040004c034dd50031b874800058c034c038008c030004c024dd50008b1805180580118048009804801180380098021baa00114984d9595cd2ab9d5573caae7d5d0aba201",
+      "hash": "2c590dcfdfd48aba8cf9f8457771fedc3988ab7a3e3f484fa91fc63a"
+    },
+    {
+      "title": "campaign_management_v01.manage_campaign.else",
+      "redeemer": {
+        "schema": {}
+      },
+      "compiledCode": "59023c01010032323232323225333002323232323253330073370e900118041baa001132323253323300b3001300c375400c26464646464646464a66602c60300042a666026601260286ea80284c8c8c8c8c8c8c8c94c8ccc070c0480204cc894ccc078c00c00854ccc078c050dd6980398101baa00b1533301e3014375a60446046604660466046604660406ea802c54ccc078cdc79bae300430203754016910100133006375c600a60406ea802c0045280a5014a02940dd69803180f1baa0173758600e603c6ea806454ccc070cdc3a400401026644a66603c600600426600c6eb8c010c080dd50058008a50375a600c603c6ea805cdd61803980f1baa0191533301c3370e900200409991299980f18018010a99980f19b89375a60446046604660406ea802cdd6980398101baa00b133006375c600a60406ea802c0045280a50375a600c603c6ea805cdd61803980f1baa01916370e6eb4c014c074dd50041180f98101810181018100009180f180f980f980f80091191980080080111299980f8008a50132533301d3371e6eb8c08400801452889980180180098108009180e180e980e980e980e980e980e980e8009180d8009180d180d980d980d980d980d980d980d980d8009bad301830193016375401e602e602a6ea80285858dd7180b000980b0011bad30140013014002375a602400260240046eb4c040004c034dd50031b874800058c034c038008c030004c024dd50008b1805180580118048009804801180380098021baa00114984d9595cd2ab9d5573caae7d5d0aba201",
+      "hash": "2c590dcfdfd48aba8cf9f8457771fedc3988ab7a3e3f484fa91fc63a"
+    }
+  ],
+  "definitions": {
+    "Action": {
+      "title": "Action",
+      "dataType": "integer"
+    },
+    "ByteArray": {
+      "dataType": "bytes"
+    },
+    "Int": {
+      "dataType": "integer"
+    },
+    "VerificationKeyHash": {
+      "title": "VerificationKeyHash",
+      "dataType": "bytes"
+    },
+    "campaign_management_v01/CFdatum": {
+      "title": "CFdatum",
+      "description": "shorthand notation for custom types\n the full version would have the explicit Data Constructor like\n type Datum { Datum {...fields are the same...} }",
+      "anyOf": [
+        {
+          "title": "CFdatum",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "campaign_id",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "title",
+              "$ref": "#/definitions/ByteArray"
+            },
+            {
+              "title": "goal",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "creator",
+              "$ref": "#/definitions/VerificationKeyHash"
+            },
+            {
+              "title": "backer",
+              "$ref": "#/definitions/VerificationKeyHash"
+            },
+            {
+              "title": "amount",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "deadline",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "current_funds",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "campaign_management_v01/CFredeemer": {
+      "title": "CFredeemer",
+      "anyOf": [
+        {
+          "title": "CFredeemer",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "campaign_id",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "action",
+              "$ref": "#/definitions/Action"
+            },
+            {
+              "title": "amount",
+              "$ref": "#/definitions/Int"
+            },
+            {
+              "title": "backer",
+              "$ref": "#/definitions/VerificationKeyHash"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

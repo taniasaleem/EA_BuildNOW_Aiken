@@ -1,0 +1,139 @@
+//// validator(creator: VerificationKeyHash, nonce: OutputReference, ..)
+////
+//// Token types:
+//// - State token (must be named "STATE_TOKEN"; minted during campaign creation to authenticate a UTxO)
+//// - Prize token (must be named after each backer PKH; minted when the campaign state changes to Finished and sent to the backers)
+
+use aiken/collection/list
+use aiken/crypto.{VerificationKeyHash}
+use cardano/address.{Address, Inline, Script, VerificationKey}
+use cardano/assets.{Lovelace, PolicyId}
+use cardano/transaction.{InlineDatum, Input, OutputReference, Transaction}
+
+pub type PaymentKeyHash =
+  VerificationKeyHash
+
+pub type StakeKeyHash =
+  VerificationKeyHash
+
+pub type CampaignState {
+  Running
+  Cancelled
+  Finished
+}
+
+pub type CampaignDatum {
+  name: ByteArray,
+  goal: Lovelace,
+  deadline: Int,
+  creator: (PaymentKeyHash, StakeKeyHash),
+  state: CampaignState,
+}
+
+pub type BackerDatum =
+  (PaymentKeyHash, StakeKeyHash)
+
+pub const state_token = "STATE_TOKEN"
+
+/// There must be a transaction input holding the state token.
+pub fn must_consume_state_token(tx: Transaction, policy_id: PolicyId) -> Bool {
+  todo @"Define fn must_consume_state_token"
+}
+
+/// There must be a transaction output holding the state token. The datum must be as expected.
+pub fn must_resend_state_token(
+  tx: Transaction,
+  policy_id: PolicyId,
+  target_datum: CampaignDatum,
+) -> Bool {
+  let is_campaign_datum =
+    fn(datum: Data) {
+      if datum is CampaignDatum {
+        datum == target_datum
+      } else {
+        False
+      }
+    }
+  let is_inline_campaign_datum =
+    fn(output_datum) {
+      when output_datum is {
+        InlineDatum(datum) -> datum |> is_campaign_datum
+        _ -> False
+      }
+    }
+
+  todo @"There must be 1 transaction output holding the STATE_TOKEN with target_datum"
+}
+
+/// During campaign creation, a state token must be minted and sent to self contract address
+/// along with the CampaignDatum specified in the minting redeemer.
+/// The transaction must consume the nonce to ensure token uniqueness and is signed by the campaign creator.
+pub fn must_mint_state_token(
+  tx: Transaction,
+  creator_pkh: VerificationKeyHash,
+  nonce: OutputReference,
+  policy_id: PolicyId,
+  redeemer_datum: CampaignDatum,
+) -> Bool {
+  todo @"must be signed by the campaign creator"
+  todo @"must consume the nonce UTxO"
+  todo @"must send 1 State Token to self contract address; HINT: you can call must_resend_state_token(..)"
+}
+
+/// Prize tokens must be distributed to all backers.
+pub fn must_mint_prize_tokens(
+  tx: Transaction,
+  backer_inputs: List<Input>,
+  policy_id: PolicyId,
+) -> Bool {
+  todo @"must distribute prize tokens to all backers"
+}
+
+/// The total lovelace value sum of transaction inputs must be >= than the goal.
+pub fn must_reach_goal(backer_inputs: List<Input>, goal: Lovelace) -> Bool {
+  todo @"Define fn must_reach_goal"
+}
+
+/// When the campaign state is Running then it can be changed to Cancelled (spend) or Finished (mint)
+pub fn must_update_campaign_state(
+  tx: Transaction,
+  policy_id: PolicyId,
+  new_state: CampaignState,
+) -> Bool {
+  todo @"get the state token tx input"
+  todo @"tx input UTxO datum must be CampaignDatum, the state must be Running"
+  todo @"set the new datum with the new state"
+
+  todo @"only support changing state from Running to Cancelled or Finished"
+  todo @"when Cancelled: must resend the state token and the datum with the updated state (HINT: you can call must_resend_state_token), the backers can claim refunds inidivually"
+  todo @"when Finished: must resend the state token and the datum with the updated state, the goal must be reached, and the prize tokens must be distributed (HINT: you can call must_mint_prize_tokens)"
+}
+
+// ## Refund (spend)
+
+/// The transaction must be signed by the PKH specified in the datum.
+pub fn must_spend_own_utxo(tx: Transaction, o_ref: OutputReference) -> Bool {
+  todo @"find the UTxO input by its OutputReference"
+  todo @"its datum must be BackerDatum"
+  todo @"tx signer must only be [backer_pkh]"
+}
+
+/// The campaign must have been cancelled
+pub fn must_have_been_cancelled(tx: Transaction, policy_id: PolicyId) -> Bool {
+  todo @"get campaign UTxO from reference inputs"
+  todo @"the campaign UTxO must hold the state token"
+  todo @"extract inline campaign datum"
+  todo @"check whether campaign is cancelled from the datum"
+}
+
+/// A backer can spend their UTxO(s) by proving that the campaign has been Cancelled.
+pub fn must_refund(
+  tx: Transaction,
+  policy_id: PolicyId,
+  o_ref: OutputReference,
+) -> Bool {
+  and {
+    must_spend_own_utxo(tx, o_ref)?,
+    must_have_been_cancelled(tx, policy_id)?,
+  }
+}

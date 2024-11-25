@@ -2,6 +2,10 @@
 
 Emurgo Academy's BuildNOW Aiken course materials.
 
+## Aiken Roadmap
+
+![aiken-roadmap](https://github.com/user-attachments/assets/e0c89fa1-6927-4d8e-99f5-c352a6fb047b)
+
 ## Suplemental Materials
 
 You can fork the following repositories. When you push your exercise repo commit, a GitHub Action should run and it must succeed. For detailed instructions for each exercise, please refer to README.md of the individual repository.
@@ -16,7 +20,7 @@ Aiken primitive types:
 Custom types:
 
 - [showcase repo](https://github.com/ariady-putra-emurgo/aiken_custom_types): In this project, we take a look into Aiken custom, opaque, and recursive types
-- [exercise repo](https://github.com/ariady-putra-emurgo/aiken_custom_types_exercise): Your task is to FIX the types, and play around with them afterward
+- [exercise repo](https://github.com/ariady-putra-emurgo/aiken_custom_types_exercise): Your task is to FIX All the types, and play around with them afterward
 
 ## Core Features
 

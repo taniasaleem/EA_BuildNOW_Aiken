@@ -1,69 +1,97 @@
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
 use cardano/transaction.{OutputReference, Transaction}
+use cardano/assets.{PolicyId}
 
 /// shorthand notation for custom types
 /// the full version would have the explicit Data Constructor like
 /// type Datum { Datum {...fields are the same...} }
-pub type CFdatum = CFdatum {
-  campaign_id: Int,
-  title: ByteArray,
+pub type CFdatum {
   goal: Int,
-  creator: VerificationKeyHash,
   backer: VerificationKeyHash,
-  amount: Int,
   deadline: Int,
-  current_funds: Int,
 }
 
 /// Actions Enumerator
 ///  0 -> Cancel Campaign
 ///  1 -> Support Campaign
-///  2 -> 
-///
-pub type Action =
+///  2 -> Claims
+pub type CFredeemer =
   Int
 
-pub type CFredeemer {
-  campaign_id: Int,
-  action: Action,
-  amount: Int,
-  backer: VerificationKeyHash,
-}
+///  0 -> Forge Campaign Token
+///  1 -> Forge Backers Token
+///  2 -> Burn Campaign Token
+///  3 -> Burn Backer Token
+pub type MintAction = Int
 
-validator manage_campaign {
+validator manage_campaign(campaign_id: Int, title: ByteArray, creator: VerificationKeyHash, appkey: VerificationKeyHash) {
   spend(
     datum: Option<CFdatum>,
     redeemer: CFredeemer,
-    _utxo: OutputReference,
+    utxo: OutputReference,
     transaction: Transaction,
   ) {
     expect Some(datum) = datum
+    expect must_spend_token(utxo, transaction)
 
-    when redeemer.action is {
-      0 ->
-        cancel_campaign(
-          datum,
-          redeemer.campaign_id,
-          transaction.extra_signatories,
+    when redeemer is {
+      0 -> cancel_campaign(
+           datum,
+           creator,
+           transaction.extra_signatories,
+         )
+
+      1 -> support_campaign(
+           datum,
+           transaction.extra_signatories,
         )
 
-      1 ->
-        support_campaign(
-          datum,
-          redeemer.campaign_id,
-          transaction.extra_signatories,
-        )
-
-      2 -> claims(datum, redeemer.campaign_id, transaction.extra_signatories)
+      2 -> claims(datum, creator, transaction.extra_signatories)
       _ -> fail
     }
+  }
+
+  mint(redeemer: MintAction, policy: PolicyId , tx_info: Transaction) {
+      when redeemer is {
+          0 -> must_be_signed_by(appkey, tx_info.extra_signatories) && must_be_signed_by(creator, tx_info.extra_signatories)
+          1 -> True
+          2 -> True
+          3 -> True
+          _ -> False
+
+
+      }
   }
 
   else(_) {
     fail
   }
 }
+
+fn must_spend_token(utxo: OutputReference, tx_info: Transaction) -> Bool {
+  expect Some(own_input) = 
+    tx_info.inputs
+       |> transaction.find_input(utxo)
+
+  let allOwnInputs =
+      tx_info.inputs
+        |> map(fn(i) { i.output })
+        |> filter(fn(o) { o.address.payment_credential == ownHash })
+
+  let allOwnOutputs =
+      self.outputs |> filter(fn(o) { o.address.payment_credential == ownHash })
+
+  expect Script(policy_id) = input.output.address.payment_credential
+  trace @"PolicyID": policy_id
+  expect [Pair(asset_name, amount)] =
+    mint
+      |> assets.tokens(policy_id)
+      |> dict.to_pairs()
+  trace @"Token": asset_name, amount
+  (asset_name, amount)
+}
+
 
 /// Cancellation conditions
 ///  Datum.campaignId == Redeemer.campaignId
@@ -73,11 +101,11 @@ validator manage_campaign {
 ///
 fn cancel_campaign(
   datum: CFdatum,
-  campaign_id: Int,
+  creator: VerificationKeyHash,
   signatories: List<VerificationKeyHash>,
 ) -> Bool {
-  datum.campaign_id == campaign_id && datum.current_funds == 0 && datum.amount == 0 && datum.backer == "" && must_be_signed_by(
-    datum.creator,
+   datum.backer == "" && must_be_signed_by(
+    creator,
     signatories,
   )
 }
@@ -90,10 +118,9 @@ fn cancel_campaign(
 ///
 fn support_campaign(
   datum: CFdatum,
-  campaign_id: Int,
   signatories: List<VerificationKeyHash>,
 ) -> Bool {
-  datum.campaign_id == campaign_id && must_be_signed_by(
+   must_be_signed_by(
     datum.backer,
     signatories,
   )
@@ -106,11 +133,10 @@ fn support_campaign(
 ///
 fn claims(
   datum: CFdatum,
-  campaign_id: Int,
+  creator: VerificationKeyHash,
   signatories: List<VerificationKeyHash>,
-) -> Bool {
-  datum.campaign_id == campaign_id && datum.current_funds >= datum.goal && must_be_signed_by(
-    datum.creator,
+) -> Bool { must_be_signed_by(
+    creator,
     signatories,
   )
 }

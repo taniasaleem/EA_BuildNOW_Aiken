@@ -1,4 +1,4 @@
-utxoin="ed24c9287d374bd0c88f0a8f3c5388b67734f2d54075756ab38344dc7caad15f#4"
+utxoin="ae6ff8c80055cff2baa4ca410223d77249ff2e1603d1ddccc542fa64da464b08#0"
 address=$(cat ./compiled/simple.addr)
 output="110000000"
 
@@ -7,6 +7,12 @@ cardano-cli conway transaction build \
   --tx-in $utxoin \
   --tx-out $address+$output \
   --tx-out-inline-datum-file ./values/datum.json \
+  --tx-out $address+$output \
+  --tx-out-inline-datum-file ./values/adam_datum.json \
+  --tx-out $address+$output \
+  --tx-out-inline-datum-file ./values/duncan_datum.json \
+  --tx-out $address+$output \
+  --tx-out-inline-datum-file ./values/max_datum.json \
   --change-address $nami3 \
   --out-file simple.unsigned
 
